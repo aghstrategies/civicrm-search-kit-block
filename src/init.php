@@ -123,6 +123,14 @@ function civicrm_search_kit_block_cgb_block_render($attr, $content) {
 	  $data = civicrm_api4($apiEntity, 'get', $apiParams);
 	  $string = '<table>';
 	  //use first record to build  table headers
+		//this is a draft that didn't really work because the API labels are a little wonky with joins
+    /*foreach ($data[0] as $head => $val) {
+			$head = str_replace('_', ' ', $head);
+			$head = ucwords($head);
+			$string .= '<th>';
+			$string .= $head;
+			$string .= '</th>';
+		}*/
 	  foreach ($data as $row) {
 	 	  $string .= '<tr>';
 			foreach ($row as $key => $value) {
