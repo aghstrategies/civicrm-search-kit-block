@@ -33,15 +33,17 @@ const { serverSideRender: ServerSideRender } = wp;
 registerBlockType( 'cgb/block-civicrm-search-kit-block', {
 	// Block name. Block names must be string that contains a namespace prefix. Example: my-plugin/my-custom-block.
 	title: __( 'civicrm-search-kit-block' ), // Block title.
-	icon: 'dashicons-list-view', // Block icon from Dashicons → https://developer.wordpress.org/resource/dashicons/.
+	icon: 'list-view', // Block icon from Dashicons → https://developer.wordpress.org/resource/dashicons/.
 	category: 'common', // Block category — Group blocks together based on common traits E.g. common, formatting, layout widgets, embed.
 	keywords: [
 	],
   attributes: {
     savedSearchId: {
-      type: 'number',
-      default: ''
+      type: 'string',
     },
+    templateId: {
+      type: 'string',
+    }
   },
 
 	/**
@@ -73,12 +75,21 @@ registerBlockType( 'cgb/block-civicrm-search-kit-block', {
                   onChange={(newval) => setAttributes({ savedSearchId: newval })}
                 />
               </PanelRow>
+              <PanelRow>
+                <SelectControl
+                  label="Template"
+                  value={attributes.templateId}
+                  options={availableTemplates}
+                  onChange={(newval) => setAttributes({ templateId: newval })}
+                />
+              </PanelRow>
             </PanelBody>
           </InspectorControls>
           <ServerSideRender
         		block={props.name}
         		attributes={{
         		  savedSearchId: attributes.savedSearchId,
+              templateId: attributes.templateId,
         		}}
         	/>
         </div>

@@ -78,6 +78,17 @@ function civicrm_search_kit_block_cgb_block_assets() { // phpcs:ignore
 	};
   wp_localize_script( 'civicrm_search_kit_block-cgb-block-js', 'savedSearchesPHP', $options );
 
+	$dir = WP_PLUGIN_DIR . '/civicrm-search-kit-block/templates';
+	$files = array_diff(scandir($dir), array('.', '..'));
+	$templates = [];
+	foreach ($files as $file) {
+		$obj = new stdClass();
+		$obj->label = $file;
+		$obj->value = $file;
+		$templates[] = $obj;
+	}
+	wp_localize_script( 'civicrm_search_kit_block-cgb-block-js', 'availableTemplates', $templates );
+
 	/**
 	 * Register Gutenberg block on server-side.
 	 *
@@ -99,9 +110,12 @@ function civicrm_search_kit_block_cgb_block_assets() { // phpcs:ignore
 			'render_callback' => 'civicrm_search_kit_block_cgb_block_render',
 			'attributes' => [
 		    'savedSearchId' => [
-					'type' => 'number',
+					'type' => 'string',
 		    ],
-	    ]
+				'templateId' => [
+					'type' => 'string',
+		    ],
+	    ],
 		)
 	);
 }
@@ -121,7 +135,11 @@ function civicrm_search_kit_block_cgb_block_render($attr, $content) {
 		$apiParams['checkPermissions'] = FALSE;
 	  //make the api call and build a string of some sort. Starting with a table.
 	  $data = civicrm_api4($apiEntity, 'get', $apiParams);
-	  $string = '<table>';
+		$wrapperTemplate = file_get_contents(WP_PLUGIN_DIR . '/civicrm-search-kit-block/templates/' . $attr['templateId'] . '/wrapper.tpl');
+		$rowTemplate = file_get_contents(WP_PLUGIN_DIR . '/civicrm-search-kit-block/templates/' . $attr['templateId'] . '/row.tpl');
+		$dataTemplate = file_get_contents(WP_PLUGIN_DIR . '/civicrm-search-kit-block/templates/' . $attr['templateId'] . '/data.tpl');
+
+	  $string = '';
 	  //use first record to build  table headers
 		//this is a draft that didn't really work because the API labels are a little wonky with joins
     /*foreach ($data[0] as $head => $val) {
@@ -131,20 +149,20 @@ function civicrm_search_kit_block_cgb_block_render($attr, $content) {
 			$string .= $head;
 			$string .= '</th>';
 		}*/
+		$rowOut = '';
 	  foreach ($data as $row) {
-	 	  $string .= '<tr>';
+			$data = '';
 			foreach ($row as $key => $value) {
-				$string .= '<td>';
-				$string .= $value;
-				$string .= '</td>';
+				$data .= str_replace('%data%', $value, $dataTemplate);
 			}
-			$string .= '</tr>';
+			$rowOut .= str_replace('%data%', $data, $rowTemplate);
 	  }
-		$string .= '</table>';
+		$string .= str_replace('%data%', $rowOut, $wrapperTemplate);
   }
 	else {
 		$string = 'Invalid Parameters';
 	}
+
 	return $string;
 }
 
