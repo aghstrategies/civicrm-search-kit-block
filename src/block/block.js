@@ -43,6 +43,9 @@ registerBlockType( 'cgb/block-civicrm-search-kit-block', {
     },
     templateId: {
       type: 'string',
+    },
+    checkPermissions: {
+      type: 'string',
     }
   },
 
@@ -83,6 +86,14 @@ registerBlockType( 'cgb/block-civicrm-search-kit-block', {
                   onChange={(newval) => setAttributes({ templateId: newval })}
                 />
               </PanelRow>
+              <PanelRow>
+                <SelectControl
+                  label="Check Permissions?"
+                  value={attributes.checkPermissions}
+                  options={checkPermissions}
+                  onChange={(newval) => setAttributes({ checkPermissions: newval })}
+                />
+              </PanelRow>
             </PanelBody>
           </InspectorControls>
           <ServerSideRender
@@ -90,6 +101,7 @@ registerBlockType( 'cgb/block-civicrm-search-kit-block', {
         		attributes={{
         		  savedSearchId: attributes.savedSearchId,
               templateId: attributes.templateId,
+              checkPermissions: attributes.checkPermissions,
         		}}
         	/>
         </div>

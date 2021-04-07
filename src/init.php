@@ -89,6 +89,21 @@ function civicrm_search_kit_block_cgb_block_assets() { // phpcs:ignore
 	}
 	wp_localize_script( 'civicrm_search_kit_block-cgb-block-js', 'availableTemplates', $templates );
 
+  $permissions = [];
+  for ($i = 0; $i < 2; $i++) {
+		$obj = new stdClass();
+    if ($i) {
+			$obj->label = "True";
+			$obj->value = "1";
+		}
+		else {
+			$obj->label = "False";
+			$obj->value = "0";
+		}
+		$permissions[] = $obj;
+	}
+	wp_localize_script( 'civicrm_search_kit_block-cgb-block-js', 'checkPermissions', $permissions );
+
 	/**
 	 * Register Gutenberg block on server-side.
 	 *
@@ -115,6 +130,9 @@ function civicrm_search_kit_block_cgb_block_assets() { // phpcs:ignore
 				'templateId' => [
 					'type' => 'string',
 		    ],
+				'checkPermissions' => [
+					'type' => 'string',
+				],
 	    ],
 		)
 	);
@@ -133,6 +151,9 @@ function civicrm_search_kit_block_cgb_block_render($attr, $content) {
 	}
 	if ($apiEntity && $apiParams) {
 		$apiParams['checkPermissions'] = FALSE;
+		if ($attr['checkPermissions']) {
+			$apiParams['checkPermissions'] = TRUE;
+		}
 	  //make the api call and build a string of some sort. Starting with a table.
 	  $data = civicrm_api4($apiEntity, 'get', $apiParams);
 		$wrapperTemplate = file_get_contents(WP_PLUGIN_DIR . '/civicrm-search-kit-block/templates/' . $attr['templateId'] . '/wrapper.tpl');
@@ -140,15 +161,6 @@ function civicrm_search_kit_block_cgb_block_render($attr, $content) {
 		$dataTemplate = file_get_contents(WP_PLUGIN_DIR . '/civicrm-search-kit-block/templates/' . $attr['templateId'] . '/data.tpl');
 
 	  $string = '';
-	  //use first record to build  table headers
-		//this is a draft that didn't really work because the API labels are a little wonky with joins
-    /*foreach ($data[0] as $head => $val) {
-			$head = str_replace('_', ' ', $head);
-			$head = ucwords($head);
-			$string .= '<th>';
-			$string .= $head;
-			$string .= '</th>';
-		}*/
 		$rowOut = '';
 	  foreach ($data as $row) {
 			$data = '';
@@ -160,7 +172,7 @@ function civicrm_search_kit_block_cgb_block_render($attr, $content) {
 		$string .= str_replace('%data%', $rowOut, $wrapperTemplate);
   }
 	else {
-		$string = 'Invalid Parameters';
+		$string = 'Invalid Parameters - write something helpful here for the first go';
 	}
 
 	return $string;
