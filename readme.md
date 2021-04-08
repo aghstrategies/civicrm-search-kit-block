@@ -1,3 +1,26 @@
+# CiviCRM Search Kit Block
+Requirements:
+- CiviCRM 5.x with Search Kit
+- Gutenberg editor enabled
+
+This plugin provides a Gutenberg block for displaying a CiviCRM Search kit display to front end users. It will display fields and columns as configured in your Search Kit Display using customizable templates. This could be useful for creating directories or other public listings of any CiviCRM data you can get at with the api v4.
+
+## Usage
+1) Install and Enable the plugin and requirements
+2) Configure a CiviCRM Search Kit Search (CiviCRM > Search > Search Kit) and save it
+3) Add or Edit a Post or Page with the Gutenberg editor. When you "Add a Block", the option for a "civicrm-search-kit" block will be available
+4) Configure the Block in the right-hand column under "CiviCRM Search Display Options". You'll choose the search to display, the display template, and whether to check if the front-end viewer has permission to access the data displayed.
+
+## Customizing Displays
+Displays are rendered with html partials in the plugin under /templates. The plugin will search any folder under /templates for display template options, so you can extend these to add whatever html, classes, etc you need for a nice display.
+
+## Common Issues
+- Block displays "Invalid Parameters": Display ID may no longer be valid, template directory chosen may not exist or permissions are incorrect
+- Block displays Nothing: Check if you are checking permissions, check if the CiviCRM Search Kit search actually comes up with results
+
+## Development Notes
+Development kit left in for easy debugging and/or extension of features.
+
 This project was bootstrapped with [Create Guten Block](https://github.com/ahmadawais/create-guten-block).
 
 Below you will find some information on how to run scripts.
