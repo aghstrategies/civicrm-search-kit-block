@@ -172,7 +172,7 @@ function civicrm_search_kit_block_cgb_block_render($attr, $content) {
 		$string .= str_replace('%data%', $rowOut, $wrapperTemplate);
   }
 	else {
-		$string = 'Invalid Parameters. Likely you have not yet set up a CiviCRM Search Kit display, or have not chosen a valid display and a valid template under options when you configure this block.';
+		$string = 'Invalid Parameters. Likely you have not yet set up a CiviCRM Search Kit display, or have not chosen a valid display and a valid template under options when you configure this block. If you have further questions, see readme.md';
 	}
 
 	return $string;
