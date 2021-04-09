@@ -8,8 +8,13 @@ This plugin provides a Gutenberg block for displaying a CiviCRM Search kit displ
 ## Usage
 1) Install and Enable the plugin and requirements
 2) Configure a CiviCRM Search Kit Search (CiviCRM > Search > Search Kit) and save it
+![Search Kit Config](/images/searchKitConfigExample.png)
 3) Add or Edit a Post or Page with the Gutenberg editor. When you "Add a Block", the option for a "civicrm-search-kit" block will be available
+![Choose Block](/images/chooseBlock.png)
 4) Configure the Block in the right-hand column under "CiviCRM Search Display Options". You'll choose the search to display, the display template, and whether to check if the front-end viewer has permission to access the data displayed.
+![Gutenberg Block](/images/gutenbergBlock.png)
+
+![Front End Block](/images/frontEndBlock.png)
 
 ## Customizing Displays
 Displays are rendered with html partials in the plugin under /templates. The plugin will search any folder under /templates for display template options, so you can extend these to add whatever html, classes, etc you need for a nice display.
